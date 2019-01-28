@@ -155,22 +155,22 @@ public static int findDunplicate(int[] arr)
 
 ~~~java
 public class Solution {
+    // Tine：O(m+n) space:O(1)
     public boolean Find(int target, int [][] array) 
     {
-        int row = array.length;
-        int col = array[0].length;
-        if(row == 0 || col == 0 || array == null) return false;
-        int i = 0;// 初始行号
-        int j = col -1; //初始列号
-        while(i<row && j<col && i>=0 && j>=0)
+        if(array==null||array[0]==null||array.length == 0|| array[0].length == 0)
+            return false;
+        int i=0,j = array[0].length-1;
+        int m = array.length; //m行
+        int n = array[0].length; //n列
+        while(i>=0 && i<m && j>=0 && j<n)
         {
-            if(array[i][j] > target){
-                j--;
-            }else if(array[i][j] < target){
-                i++;
-            }else{
+            if(array[i][j] == target)
                 return true;
-            }
+            else if(array[i][j] > target)
+                j--;
+            else
+                i++;
         }
         return false;
     }
@@ -2145,27 +2145,54 @@ public class Solution {
 public class Solution {
     public int NumberOf1Between1AndN_Solution(int n) 
     {
-        int number = 0;
-        for(int i=0;i<=n;i++)
+        if(n<1)
+            return 0;
+        int count =0;
+        for(int i=1;i<=n;i++)
         {
-            number += NumberOf1(i);
-         }
-        return number;
-    }
-    
-    public int NumberOf1(int n)
-    {
-        int number = 0;
-        while(n!=0)
-        {
-            if(n % 10 == 1)
-                number++;
-            n = n/10;
+            int num =i;
+            while(num!=0)
+            {
+                if(num%10 == 1)
+                    count++;
+                num = num/10;
+            }
         }
-        return number;
+        return count;
     }
 }
 ~~~
+
+数学解法：
+
+```java
+//数学解法求,分别别每个个位，百位...上1的个数
+public class Solution {
+    public int NumberOf1Between1AndN_Solution(int n) 
+    {
+        if(n<1)
+            return 0;
+        long count = 0, factor=1;
+        while(n/factor != 0)
+        {
+            long c = (n/factor)%10;
+            long high = n/(10*factor);
+            long low = n%factor;
+            if(c==0)
+            {
+                count += high*factor;
+            }else if(c == 1)
+            {
+                count += high*factor + low +1;
+            }else{
+                count += (high+1)*factor;
+            }
+            factor = factor*10;
+        }
+        return (int)count;
+    }
+}
+```
 
 
 
